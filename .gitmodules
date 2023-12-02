@@ -1,0 +1,3 @@
+[submodule "advent_of_code_secrets"]
+	path = advent_of_code_secrets
+	url = ssh://git@pigit:/~/git_repos/advent_of_code_secrets
