@@ -1,9 +1,8 @@
 use std::fs::File;
 use std::io::{self, BufRead};
-use regex::Regex;
 
 fn string_to_digit(in_string: &str) -> Option<i32>{
-    let num = match in_string {
+    return match in_string {
         "1" => Some(1),
         "2" => Some(2),
         "3" => Some(3),
@@ -24,7 +23,6 @@ fn string_to_digit(in_string: &str) -> Option<i32>{
         "nine" => Some(9),
         _ => None
     };
-    return num;
 }
 
 
@@ -34,24 +32,28 @@ fn main() -> io::Result<()> {
     let mut numbers: Vec<i32> = Vec::new();
     
     let reader = io::BufReader::new(file);
-    let re_pattern : String= .to_string();
-    let re_forward = Regex::new(r"([0-9]|one|two|three|four|five|six|seven|eight|nine)").unwrap();
-    let re_backward= Regex::new().unwrap();
+    let number_words =  ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
     
     for line_result in reader.lines() {
         match line_result {
             Ok(line) => {
-                let first_number: i32 = re_forward.find(&line).unwrap().as_str();
-                let line_numbers: Vec<i32> = re_forward.find_iter(&line).filter_map(|x| string_to_digit(x.as_str())).collect();
+                let mut line_numbers: Vec<i32> = Vec::new();
+                for (i, _c) in line.chars().enumerate() {
+                    for word in number_words {
+                        if line.len() >= word.len() + i && line[i..].starts_with(word) {
+                            if let Some(nr) = string_to_digit(word) {line_numbers.push(nr)}
+                        }
+                    }
+                }
                 numbers.push(line_numbers[0]*10+line_numbers.last().unwrap());
                 println!("{:?}, {:?}, {:#?}", line, line_numbers ,line_numbers[0]*10+line_numbers.last().unwrap() )
-                
             }
             Err(_) => eprintln!("Error reading line")
         }
     }
-        println!("{:#?}", numbers.iter());
-        println!("{:#?}", numbers.iter().sum::<i32>());
+    println!("{:#?}", numbers.iter());
+    println!("{:#?}", numbers.iter().sum::<i32>());
     Ok(())
 }
 
