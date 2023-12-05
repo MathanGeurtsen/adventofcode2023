@@ -29,7 +29,7 @@ fn string_to_digit(in_string: &str) -> Option<i32>{
 fn main() -> io::Result<()> {
     let file = File::open("../advent_of_code_secrets/2023/day_01/calibration.txt")?;
     
-    let mut numbers: Vec<i32> = Vec::new();
+    let mut games: Vec<Vec<str>> = Vec::new();
     
     let reader = io::BufReader::new(file);
     let number_words =  ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
