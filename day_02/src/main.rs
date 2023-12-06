@@ -13,6 +13,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>>
     let blue_max = 14;
     
     let mut possible: Vec<i32> = Vec::new();
+    let mut powers = Vec::<i32>::new();
     
     // Game 1: 1 red, 5 blue, 1 green; 16 blue, 3 red; 6 blue, 5 red; 4 red, 7 blue, 1 green
     
@@ -27,7 +28,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>>
         let game_nr = game_nr_cap["nr"].parse()?;
         
         let mut poss: bool = true;
-       
+
+        let mut nr_red_max = 0;
+        let mut nr_green_max = 0;
+        let mut nr_blue_max = 0;
+
+      
         let hands: Vec<Vec<&str>> = split_line[1].split(';').map(|hand| hand.split(',').collect()).collect();
         for hand in hands{
             let mut nr_red = 0;
@@ -49,15 +55,21 @@ fn main() -> Result<(), Box<dyn std::error::Error>>
             }
 
             poss = (nr_red <= red_max && nr_green <= green_max && nr_blue <= blue_max) && poss;
+            nr_red_max = if nr_red > nr_red_max {nr_red } else {nr_red_max};
+            nr_green_max = if nr_green > nr_green_max {nr_green } else {nr_green_max};
+            nr_blue_max = if nr_blue > nr_blue_max {nr_blue } else {nr_blue_max};
         }
         if poss{
             possible.push(game_nr)
         }
+        let power = nr_red_max * nr_green_max * nr_blue_max;
+        powers.push(power);
         
-        println!("{:?}, {:?}", line, poss)
+        println!("{:?}, {:?}, {:?}", line, poss, power)
     }
-    let i: i32 =    possible.iter().sum();
-    println!("{:#?}, {:?}", possible, i);
+
+    println!("possible: {:#?}, {:?}", possible, possible.iter().sum::<i32>());
+    println!("powers: {:#?}", powers.iter().sum::<i32>());
     
     Ok(())
 }
